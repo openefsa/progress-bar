@@ -97,8 +97,9 @@ public class CustomProgressBar implements IProgressBar {
 			done = progressLimit;
 		}
 
-		for ( ProgressListener listener : listeners )
+		for ( ProgressListener listener : listeners ) {
 			listener.progressChanged(done, progressLimit);
+		}
 		
 		refreshProgressBar( done );
 	}

@@ -110,12 +110,17 @@ public class TableMultipleProgress {
 				@Override
 				public void progressChanged(double currentProgress, 
 						double maxProgress) {
-					return;
+					
+					
+					if (maxProgress == currentProgress) {
+						setStatus ( COMPLETED );
+					}
+					else {
+						setStatus ( ONGOING );
+					}
 				}
 				@Override
-				public void progressChanged(double currentProgress) {
-					setStatus ( ONGOING );
-				}
+				public void progressChanged(double currentProgress) {}
 
 				@Override
 				public void progressStopped(Exception e) {
@@ -125,9 +130,7 @@ public class TableMultipleProgress {
 				}
 
 				@Override
-				public void progressCompleted() {
-					setStatus ( COMPLETED );
-				}
+				public void progressCompleted() {}
 			});
 			
 			editor = new TableEditor( table );
