@@ -24,8 +24,6 @@ public class FormProgressBar implements IProgressBar {
 	private String title;
 
 	private boolean opened;        // if the bar is opened or not
-	private boolean cancelEnabled;
-
 	/**
 	 * Constructor, initialize the progress bar
 	 * @param shell the shell where to create the progress bar
@@ -38,7 +36,6 @@ public class FormProgressBar implements IProgressBar {
 
 		this.shell = shell;
 		this.title = title;
-		this.cancelEnabled = cancelEnabled;
 		this.style = style;
 		this.initializeGraphics(shell, style);
 	}
@@ -96,7 +93,7 @@ public class FormProgressBar implements IProgressBar {
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		label.setLayoutData(gridData);
-		Label label2 = new Label(grp , SWT.NONE);
+		new Label(grp , SWT.NONE);
 
 		// progress bar
 		progressBar = new CustomProgressBar(grp , SWT.SMOOTH);
