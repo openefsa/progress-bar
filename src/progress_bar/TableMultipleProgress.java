@@ -12,75 +12,80 @@ import org.eclipse.swt.widgets.TableItem;
 import messages.Messages;
 
 /**
- * Table used to show several processes progresses.
- * See {@link FormMultipleProgress} to get more details.
+ * Table used to show several processes progresses. See
+ * {@link FormMultipleProgress} to get more details.
+ * 
  * @author avonva
  *
  */
 public class TableMultipleProgress {
-	
+
 	private Composite parent;
 	private Table table;
 
-	public TableMultipleProgress( Composite parent ) {
+	public TableMultipleProgress(Composite parent) {
 		this.parent = parent;
 		createTable();
 	}
 
 	/**
 	 * Create the table
+	 * 
+	 * @author shahaal
+	 * @author avonva
 	 */
 	private void createTable() {
-		
+
 		// create table
-		table = new Table( parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL );
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		
+		this.table = new Table(this.parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		this.table.setHeaderVisible(true);
+		this.table.setLinesVisible(true);
+
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
-		table.setLayoutData( data );
-		
-		// add 3 columns
+		this.table.setLayoutData(data);
+
+		// col titles
+		String[] titles = { Messages.getString("ProgressTable.TaskCol"),
+				Messages.getString("ProgressTable.ProgressCol"), Messages.getString("ProgressTable.StatusCol") };
+
+		// add 3 columns and set name
 		for (int i = 0; i < 3; i++) {
-			new TableColumn(table, SWT.NONE);
+			TableColumn col = new TableColumn(this.table, SWT.NONE);
+			col.setText(titles[i]);
 		}
-		
-		// set columns names
-		table.getColumn(0).setText( Messages.getString("ProgressTable.TaskCol") );
-		table.getColumn(1).setText( Messages.getString("ProgressTable.ProgressCol") );
-		table.getColumn(2).setText( Messages.getString("ProgressTable.StatusCol") );
 	}
 
-	
 	/**
 	 * Set the table input
+	 * 
 	 * @param tasks
 	 */
-	public TableRow addRow ( String taskName ) {
+	public TableRow addRow(String taskName) {
 
 		// for each step add a record with bar
-		TableRow row = new TableRow( table, taskName );
-		
-		table.getColumn(0).pack();
-	    table.getColumn(1).setWidth(128);
-	    table.getColumn(2).setWidth(256);
-	    
-	    return row;
+		TableRow row = new TableRow(this.table, taskName);
+
+		this.table.getColumn(0).pack();
+		this.table.getColumn(1).setWidth(128);
+		this.table.getColumn(2).setWidth(256);
+
+		return row;
 	}
-	
+
 	/**
 	 * Class which represents a row in the table
+	 * 
 	 * @author avonva
 	 *
 	 */
 	public static class TableRow {
-		
+
 		// status of the progress
-		public static String READY = Messages.getString( "ProgressTable.Ready" );
-		public static String ONGOING = Messages.getString( "ProgressTable.Ongoing" );
-		public static String COMPLETED = Messages.getString( "ProgressTable.Completed" );
-		public static String ABORTED = Messages.getString( "ProgressTable.Aborted" );
-		
+		public static String READY = Messages.getString("ProgressTable.Ready");
+		public static String ONGOING = Messages.getString("ProgressTable.Ongoing");
+		public static String COMPLETED = Messages.getString("ProgressTable.Completed");
+		public static String ABORTED = Messages.getString("ProgressTable.Aborted");
+
 		private Shell shell;
 		private String name;
 		private String status;
@@ -88,80 +93,80 @@ public class TableMultipleProgress {
 		private Table table;
 		private TableItem row;
 		private TableEditor editor;
-		
-		public TableRow( Table table, String name ) {
+
+		public TableRow(Table table, String name) {
 			this.name = name;
 			this.status = READY;
 			this.table = table;
 			this.shell = table.getShell();
 			display();
 		}
-		
+
 		public void display() {
 
-			row = new TableItem( table, SWT.NONE );
-			row.setText( 0, name );
+			this.row = new TableItem(this.table, SWT.NONE);
+			this.row.setText(0, this.name);
 
 			// add progress bar
-			bar = new CustomProgressBar( table, SWT.NONE );
-			
-			bar.addProgressListener( new ProgressListener() {
-				
+			this.bar = new CustomProgressBar(this.table, SWT.NONE);
+
+			this.bar.addProgressListener(new ProgressListener() {
+
 				@Override
-				public void progressChanged(double currentProgress, 
-						double maxProgress) {
-					
-					
+				public void progressChanged(double currentProgress, double maxProgress) {
+
 					if (maxProgress == currentProgress) {
-						setStatus ( COMPLETED );
-					}
-					else {
-						setStatus ( ONGOING );
+						setStatus(COMPLETED);
+					} else {
+						setStatus(ONGOING);
 					}
 				}
+
 				@Override
-				public void progressChanged(double currentProgress) {}
+				public void progressChanged(double currentProgress) {
+				}
 
 				@Override
 				public void progressStopped(Exception e) {
-					
+
 					// if aborted
-					setStatus ( ABORTED + ": " + e.getMessage() );
+					setStatus(ABORTED + ": " + e.getMessage());
 				}
 
 				@Override
-				public void progressCompleted() {}
+				public void progressCompleted() {
+				}
 			});
-			
-			editor = new TableEditor( table );
-			editor.grabHorizontal = editor.grabVertical = true;
-			editor.setEditor( bar.getProgressBar(), row, 1 );
 
-			setStatus ( status );
+			this.editor = new TableEditor(this.table);
+			this.editor.grabHorizontal = this.editor.grabVertical = true;
+			this.editor.setEditor(this.bar.getProgressBar(), this.row, 1);
+
+			setStatus(this.status);
 		}
-		
+
 		public TableItem getRow() {
-			return row;
+			return this.row;
 		}
-		
+
 		public CustomProgressBar getBar() {
-			return bar;
+			return this.bar;
 		}
-		
+
 		public TableEditor getEditor() {
-			return editor;
+			return this.editor;
 		}
-		
-		public void setStatus( final String status) {
-			
+
+		public void setStatus(final String status) {
+
 			// guarantee that we are using the ui thread
 			// since this method is called by other threads
-			shell.getDisplay().asyncExec( new Runnable() {
-				
+			this.shell.getDisplay().asyncExec(new Runnable() {
+
 				@Override
 				public void run() {
 					TableRow.this.status = status;
-					row.setText( 2, status );
+					TableRow.this.row.setText(2, status);
 				}
 			});
 		}

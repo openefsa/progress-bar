@@ -46,8 +46,8 @@ public abstract class ProgressStep {
 	 * @return
 	 */
 	public Object getData() {
-		return data;
-	};
+		return this.data;
+	}
 	
 	/**
 	 * Start the execution of the progress step
@@ -59,7 +59,7 @@ public abstract class ProgressStep {
 		
 		execute();
 		
-		time = System.currentTimeMillis() - start;
+		this.time = System.currentTimeMillis() - start;
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public abstract class ProgressStep {
 	 * @return
 	 */
 	public long getTime() {
-		return time;
+		return this.time;
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public abstract class ProgressStep {
 	 * @return
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public abstract class ProgressStep {
 	 * @return
 	 */
 	public String getCode() {
-		return code;
+		return this.code;
 	}
 
 	/**

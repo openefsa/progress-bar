@@ -42,14 +42,14 @@ public class FormMultipleProgress {
 	 */
 	public void init() {
 		
-		dialog = new Shell( shell, SWT.SHELL_TRIM | SWT.APPLICATION_MODAL );
+		this.dialog = new Shell( this.shell, SWT.SHELL_TRIM | SWT.APPLICATION_MODAL );
 
-		dialog.setLayout( new GridLayout( 1, false ) );
+		this.dialog.setLayout( new GridLayout( 1, false ) );
 
-		dialog.setSize( 500, 300 );
+		this.dialog.setSize( 500, 300 );
 
 		// do not close this window until finished
-		closeListener = new Listener() {
+		this.closeListener = new Listener() {
 
 			@Override
 			public void handleEvent(Event arg0) {
@@ -59,22 +59,22 @@ public class FormMultipleProgress {
 		};
 		
 		// block closure of window
-		dialog.addListener( SWT.Close, closeListener );
+		this.dialog.addListener( SWT.Close, this.closeListener );
 		
-		table = new TableMultipleProgress ( dialog );
+		this.table = new TableMultipleProgress ( this.dialog );
 		
-		okBtn = new Button ( dialog, SWT.NONE );
-		okBtn.setText( Messages.getString( "ProgressTable.CloseBtn" ) );
-		okBtn.setEnabled( false );
+		this.okBtn = new Button ( this.dialog, SWT.NONE );
+		this.okBtn.setText( Messages.getString( "ProgressTable.CloseBtn" ) );
+		this.okBtn.setEnabled( false );
 
-		okBtn.setLayoutData( new GridData(SWT.CENTER, SWT.CENTER, true, false) );
+		this.okBtn.setLayoutData( new GridData(SWT.CENTER, SWT.CENTER, true, false) );
 		
 		// close if clicked
-		okBtn.addSelectionListener( new SelectionListener() {
+		this.okBtn.addSelectionListener( new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				dialog.close();
+				FormMultipleProgress.this.dialog.close();
 			}
 			
 			@Override
@@ -86,7 +86,7 @@ public class FormMultipleProgress {
 	 * Open and visualize the window
 	 */
 	public void open() {
-		dialog.open();
+		this.dialog.open();
 	}
 	
 	/**
@@ -95,14 +95,14 @@ public class FormMultipleProgress {
 	 * @return
 	 */
 	public TableRow addRow ( String taskName ) {
-		return table.addRow(taskName);
+		return this.table.addRow(taskName);
 	}
 
 	/**
 	 * Make the dialog closeable by the user
 	 */
 	public void done() {
-		dialog.removeListener( SWT.Close, closeListener );
-		okBtn.setEnabled( true );
+		this.dialog.removeListener( SWT.Close, this.closeListener );
+		this.okBtn.setEnabled( true );
 	}
 }

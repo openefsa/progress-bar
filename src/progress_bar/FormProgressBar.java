@@ -32,7 +32,7 @@ public class FormProgressBar implements IProgressBar {
 	 */
 	public FormProgressBar(Shell shell , String title, boolean cancelEnabled, int style) {
 
-		opened = false;
+		this.opened = false;
 
 		this.shell = shell;
 		this.title = title;
@@ -42,7 +42,7 @@ public class FormProgressBar implements IProgressBar {
 
 	@Override
 	public ProgressBar getProgressBar() {
-		return progressBar.getProgressBar();
+		return this.progressBar.getProgressBar();
 	}
 
 	/**
@@ -59,11 +59,11 @@ public class FormProgressBar implements IProgressBar {
 	 */
 	public void reset() {
 
-		shell.getDisplay().asyncExec(new Runnable() {
+		this.shell.getDisplay().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
-				initializeGraphics (shell, style);
+				initializeGraphics (FormProgressBar.this.shell, FormProgressBar.this.style);
 			}
 		});
 
@@ -75,35 +75,35 @@ public class FormProgressBar implements IProgressBar {
 	 */
 	public void initializeGraphics (Shell parentShell, int style) {
 
-		currentShell = new Shell(parentShell, style);
-		currentShell.setText(title);
-		currentShell.setSize(300, 130);
-		currentShell.setLayout(new FillLayout());
+		this.currentShell = new Shell(parentShell, style);
+		this.currentShell.setText(this.title);
+		this.currentShell.setSize(300, 130);
+		this.currentShell.setLayout(new FillLayout());
 
-		Composite grp = new Group(currentShell , SWT.NONE);
+		Composite grp = new Group(this.currentShell , SWT.NONE);
 		grp.setLayout(new GridLayout(2 , false));
 
 		// label for the title
-		label = new Label(grp , SWT.NONE);
-		label.setText(title);
+		this.label = new Label(grp , SWT.NONE);
+		this.label.setText(this.title);
 
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = SWT.CENTER;
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
-		label.setLayoutData(gridData);
-		new Label(grp , SWT.NONE);
+		this.label.setLayoutData(gridData);
+		this.label=new Label(grp , SWT.NONE);
 
 		// progress bar
-		progressBar = new CustomProgressBar(grp , SWT.SMOOTH);
+		this.progressBar = new CustomProgressBar(grp , SWT.SMOOTH);
 
 		Monitor primary = parentShell.getMonitor();
 		Rectangle bounds = primary.getBounds();
-		Rectangle pict = currentShell.getBounds();
+		Rectangle pict = this.currentShell.getBounds();
 		int x = bounds.x + (bounds.width - pict.width) / 2;
 		int y = bounds.y + (bounds.height - pict.height) / 2;
-		currentShell.setLocation(x, y);
+		this.currentShell.setLocation(x, y);
 	}
 
 	/**
@@ -112,28 +112,29 @@ public class FormProgressBar implements IProgressBar {
 	 * @param y
 	 */
 	public void setLocation (int x, int y) {
-		currentShell.setLocation(x, y);
+		this.currentShell.setLocation(x, y);
 	}
 
 	/**
 	 * Get the location of the progress bar
 	 */
 	public Point getLocation () {
-		return currentShell.getLocation();
+		return this.currentShell.getLocation();
 	}
 
 	/**
 	 * Show the progress bar
 	 */
+	@Override
 	public void open () {
-		opened = true;
+		this.opened = true;
 
-		if (!shell.isDisposed()) {
-			shell.getDisplay().asyncExec(new Runnable() {
+		if (!this.shell.isDisposed()) {
+			this.shell.getDisplay().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
-					currentShell.open();
+					FormProgressBar.this.currentShell.open();
 				}
 			});
 		}
@@ -143,22 +144,24 @@ public class FormProgressBar implements IProgressBar {
 	/**
 	 * Close the progress bar
 	 */
+	@Override
 	public void close () {
 
 		// set the opened state accordingly
-		opened = false;
+		this.opened = false;
 
-		if (progressBar.isDisposed())
+		if (this.progressBar.isDisposed())
 			return;
 
-		Display disp = progressBar.getDisplay();
+		Display disp = this.progressBar.getDisplay();
 		if (disp.isDisposed())
 			return;
 		disp.asyncExec(new Runnable() {
+			@Override
 			public void run () {
-				if (currentShell.isDisposed())
+				if (FormProgressBar.this.currentShell.isDisposed())
 					return;
-				currentShell.close();
+				FormProgressBar.this.currentShell.close();
 			}
 		});
 	}
@@ -168,11 +171,11 @@ public class FormProgressBar implements IProgressBar {
 	 * @param progressLimit
 	 */
 	public void setProgressLimit(int progressLimit) {
-		progressBar.setProgressLimit(progressLimit);
+		this.progressBar.setProgressLimit(progressLimit);
 	}
 
 	public void removeProgressLimit() {
-		progressBar.removeProgressLimit();
+		this.progressBar.removeProgressLimit();
 	}
 
 	/**
@@ -183,7 +186,7 @@ public class FormProgressBar implements IProgressBar {
 	 * @param progressStep
 	 */
 	public void setProgressStep(double progressStep) {
-		progressBar.setProgressStep(progressStep);
+		this.progressBar.setProgressStep(progressStep);
 	}
 
 	/**
@@ -191,7 +194,7 @@ public class FormProgressBar implements IProgressBar {
 	 * {@link #progressStep} variable
 	 */
 	public void nextStep() {
-		progressBar.nextStep();
+		this.progressBar.nextStep();
 	}
 
 	/**
@@ -201,8 +204,9 @@ public class FormProgressBar implements IProgressBar {
 	 * to set the progress bar progresses
 	 * @param progress
 	 */
+	@Override
 	public void addProgress (double progress) {
-		progressBar.addProgress(progress);
+		this.progressBar.addProgress(progress);
 	}
 
 	/**
@@ -210,42 +214,45 @@ public class FormProgressBar implements IProgressBar {
 	 * @param percent
 	 */
 	public void setProgress (double percent) {
-		progressBar.setProgress(percent);
+		this.progressBar.setProgress(percent);
 	}
 
 	/**
 	 * Set the bar to 100%
 	 */
+	@Override
 	public void fillToMax() {
-		progressBar.fillToMax();
+		this.progressBar.fillToMax();
 	}
 
 	/**
 	 * Set the label of the progress bar
 	 * @param text
 	 */
+	@Override
 	public void setLabel (final String text) {
 
-		if (progressBar.isDisposed())
+		if (this.progressBar.isDisposed())
 			return;
 
 		// open if necessary
 		if (!isOpened())
 			open();
 
-		Display disp = progressBar.getDisplay();
+		Display disp = this.progressBar.getDisplay();
 
 		if (disp.isDisposed())
 			return;
 
 		disp.asyncExec(new Runnable() {
+			@Override
 			public void run () {
 
-				if (progressBar.isDisposed())
+				if (FormProgressBar.this.progressBar.isDisposed())
 					return;
 
-				if (label != null)
-					label.setText(text);
+				if (FormProgressBar.this.label != null)
+					FormProgressBar.this.label.setText(text);
 			}
 		});
 	}
@@ -255,7 +262,7 @@ public class FormProgressBar implements IProgressBar {
 	 * @return
 	 */
 	public boolean isOpened() {
-		return opened;
+		return this.opened;
 	}
 
 	/**
@@ -263,16 +270,16 @@ public class FormProgressBar implements IProgressBar {
 	 * @return
 	 */
 	public boolean isCompleted() {
-		return progressBar.isCompleted();
+		return this.progressBar.isCompleted();
 	}
 
 	@Override
 	public void addProgressListener(ProgressListener listener) {
-		progressBar.addProgressListener(listener);
+		this.progressBar.addProgressListener(listener);
 	}
 
 	@Override
 	public void stop(Exception e) {
-		progressBar.stop(e);
+		this.progressBar.stop(e);
 	}
 }

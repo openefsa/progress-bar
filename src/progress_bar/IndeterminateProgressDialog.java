@@ -39,9 +39,9 @@ public class IndeterminateProgressDialog extends Dialog {
 		Composite composite = new Composite(shell , SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 
-		if (progressLabel != null) {
+		if (this.progressLabel != null) {
 			Label label = new Label(composite, SWT.NONE);
-			label.setText(progressLabel);
+			label.setText(this.progressLabel);
 		}
 		
 		// progress bar
@@ -57,7 +57,7 @@ public class IndeterminateProgressDialog extends Dialog {
 	}
 	
 	public ProgressBar getProgressBar() {
-		return progressBar;
+		return this.progressBar;
 	}
 
 	/**
@@ -66,13 +66,13 @@ public class IndeterminateProgressDialog extends Dialog {
 	public void open() {
 		
 		this.shell = new Shell(getParent(), getStyle());
-		shell.setSize(300, 130);
-		shell.setLayout(new FillLayout());
+		this.shell.setSize(300, 130);
+		this.shell.setLayout(new FillLayout());
 		
-		createContents(shell);
+		createContents(this.shell);
 		
-		shell.pack();
-		shell.open();
+		this.shell.pack();
+		this.shell.open();
 	}
 	
 	/**

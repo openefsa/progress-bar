@@ -34,22 +34,23 @@ public class CustomProgressBar implements IProgressBar {
 	public void initializeGraphics ( int style ) {
 
 		// progress bar
-		progressBar = new ProgressBar( parent, style );
-		progressBar.setMaximum( 100 );
+		this.progressBar = new ProgressBar( this.parent, style );
+		this.progressBar.setMaximum( 100 );
 
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = SWT.CENTER;
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
-		progressBar.setLayoutData( gridData );
+		this.progressBar.setLayoutData( gridData );
 	}
 	
 	/**
 	 * Get the inner progress bar
 	 */
+	@Override
 	public ProgressBar getProgressBar() {
-		return progressBar;
+		return this.progressBar;
 	}
 	
 	/**
@@ -59,20 +60,21 @@ public class CustomProgressBar implements IProgressBar {
 	 * to set the progress bar progresses
 	 * @param progress
 	 */
+	@Override
 	public void addProgress ( double progress ) {
 
 		// add to the done fract the double progress
-		doneFract = doneFract + progress;
+		this.doneFract = this.doneFract + progress;
 
 		// when we reach the 1 with the done progress
 		// we can refresh the progress bar adding
 		// the integer part of the doneFract
-		if ( doneFract >= 1 ) {
+		if ( this.doneFract >= 1 ) {
 			
-			setProgress ( done + (int) doneFract );
+			setProgress ( this.done + (int) this.doneFract );
 
 			// reset the doneFract double
-			doneFract = 0;
+			this.doneFract = 0;
 		}
 	}
 	
@@ -83,25 +85,25 @@ public class CustomProgressBar implements IProgressBar {
 	public void setProgress ( double percent ) {
 
 		if ( percent >= 100 ) {
-			done = 100;
+			this.done = 100;
 		}
 		else if ( percent < 0 ) {
-			done = 0;
+			this.done = 0;
 		}
 		else {
-			done = (int) percent;
+			this.done = (int) percent;
 		}
 		
 		// limit progress if required
-		if ( done > progressLimit ) {
-			done = progressLimit;
+		if ( this.done > this.progressLimit ) {
+			this.done = this.progressLimit;
 		}
 
-		for ( ProgressListener listener : listeners ) {
-			listener.progressChanged(done, progressLimit);
+		for ( ProgressListener listener : this.listeners ) {
+			listener.progressChanged(this.done, this.progressLimit);
 		}
 		
-		refreshProgressBar( done );
+		refreshProgressBar( this.done );
 	}
 	
 	/**
@@ -109,22 +111,23 @@ public class CustomProgressBar implements IProgressBar {
 	 */
 	public void refreshProgressBar ( final int done ) {
 
-		if ( progressBar.isDisposed() )
+		if ( this.progressBar.isDisposed() )
 			return;
 
-		Display disp = progressBar.getDisplay();
+		Display disp = this.progressBar.getDisplay();
 
 		if ( disp.isDisposed() )
 			return;
 
 		disp.asyncExec( new Runnable() {
+			@Override
 			public void run ( ) {
 
-				if ( progressBar.isDisposed() )
+				if ( CustomProgressBar.this.progressBar.isDisposed() )
 					return;
 
-				progressBar.setSelection( done );
-				progressBar.update();
+				CustomProgressBar.this.progressBar.setSelection( done );
+				CustomProgressBar.this.progressBar.update();
 			}
 		} );
 
@@ -159,7 +162,7 @@ public class CustomProgressBar implements IProgressBar {
 	 * @return
 	 */
 	public boolean isCompleted() {
-		return done >= progressLimit;
+		return this.done >= this.progressLimit;
 	}
 	
 	/**
@@ -178,15 +181,15 @@ public class CustomProgressBar implements IProgressBar {
 	 * {@link #progressStep} variable
 	 */
 	public void nextStep() {
-		addProgress( progressStep );
+		addProgress( this.progressStep );
 	}
 	
 	public boolean isDisposed() {
-		return progressBar.isDisposed();
+		return this.progressBar.isDisposed();
 	}
 	
 	public Display getDisplay() {
-		return progressBar.getDisplay();
+		return this.progressBar.getDisplay();
 	}
 
 	@Override
@@ -200,18 +203,18 @@ public class CustomProgressBar implements IProgressBar {
 
 	@Override
 	public void addProgressListener(ProgressListener listener) {
-		listeners.add( listener );
+		this.listeners.add( listener );
 	}
 
 	@Override
 	public void stop( Exception exception ) {
-		for ( ProgressListener listener : listeners ) {
+		for ( ProgressListener listener : this.listeners ) {
 			listener.progressStopped( exception );
 		}
 	}
 
 	@Override
 	public void fillToMax() {
-		setProgress( progressLimit );
+		setProgress( this.progressLimit );
 	}
 }

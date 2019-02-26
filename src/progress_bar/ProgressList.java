@@ -61,27 +61,27 @@ public class ProgressList extends ArrayList<ProgressStep> {
 			// execute progress step code
 			try {
 				
-				for ( ProgressStepListener listener : listeners )
+				for ( ProgressStepListener listener : this.listeners )
 					listener.progressStepStarted( step );
 				
 				step.start();
 			} catch (Exception e) {
 				e.printStackTrace();
 				
-				for ( ProgressStepListener listener : listeners )
+				for ( ProgressStepListener listener : this.listeners )
 					listener.failed( step );
 				
 				break;
 			}
 			
 			// accumulate time
-			time = time + step.getTime();
+			this.time = this.time + step.getTime();
 			
-			double singleStepProgress = maxProgress / this.size();
+			double singleStepProgress = this.maxProgress / this.size();
 			
 			// notify that the progress changed
-			for ( ProgressStepListener listener : listeners )
-				listener.progressChanged( step, singleStepProgress, maxProgress );
+			for ( ProgressStepListener listener : this.listeners )
+				listener.progressChanged( step, singleStepProgress, this.maxProgress );
 		}
 	}
 	
@@ -90,7 +90,7 @@ public class ProgressList extends ArrayList<ProgressStep> {
 	 * @param listener
 	 */
 	public void addProgressListener ( ProgressStepListener listener ) {
-		listeners.add( listener );
+		this.listeners.add( listener );
 	}
 	
 	/**
@@ -100,6 +100,6 @@ public class ProgressList extends ArrayList<ProgressStep> {
 	 * @return
 	 */
 	public long getTime() {
-		return time;
+		return this.time;
 	}
 }
