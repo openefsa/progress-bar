@@ -2,12 +2,8 @@ package progress_bar;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.ProgressBar;
@@ -25,7 +21,7 @@ public class FormProgressBar implements IProgressBar {
 
 	private boolean opened;        // if the bar is opened or not
 	/**
-	 * Constructor, initialize the progress bar
+	 * Constructor, Initialise the progress bar
 	 * @param shell the shell where to create the progress bar
 	 * @param title the title of the progress bar
 	 * @param cancelEnabled if the cancel button should be inserted or not
@@ -37,7 +33,7 @@ public class FormProgressBar implements IProgressBar {
 		this.shell = shell;
 		this.title = title;
 		this.style = style;
-		this.initializeGraphics(shell, style);
+		this.InitialiseGraphics(shell, style);
 	}
 
 	@Override
@@ -46,12 +42,12 @@ public class FormProgressBar implements IProgressBar {
 	}
 
 	/**
-	 * Initialize the progress bar without cancel button
+	 * Initialise the progress bar without cancel button
 	 * @param shell the shell where to create the progress bar
 	 * @param title the title of the progress bar
 	 */
 	public FormProgressBar(Shell shell, String title) {
-		this(shell, title, false, SWT.TITLE | SWT.APPLICATION_MODAL);
+		this(shell, title, false, SWT.TITLE | SWT.PRIMARY_MODAL);
 	}
 
 	/**
@@ -63,7 +59,7 @@ public class FormProgressBar implements IProgressBar {
 
 			@Override
 			public void run() {
-				initializeGraphics (FormProgressBar.this.shell, FormProgressBar.this.style);
+				InitialiseGraphics (FormProgressBar.this.shell, FormProgressBar.this.style);
 			}
 		});
 
@@ -73,31 +69,20 @@ public class FormProgressBar implements IProgressBar {
 	 * Creates all the graphics for the progress bar
 	 * @param parentShell
 	 */
-	public void initializeGraphics (Shell parentShell, int style) {
+	public void InitialiseGraphics (Shell parentShell, int style) {
 
 		this.currentShell = new Shell(parentShell, style);
 		this.currentShell.setText(this.title);
-		this.currentShell.setSize(300, 130);
-		this.currentShell.setLayout(new FillLayout());
-
-		Composite grp = new Group(this.currentShell , SWT.NONE);
-		grp.setLayout(new GridLayout(2 , false));
+		this.currentShell.setSize(350, 100);
+		this.currentShell.setLayout(new GridLayout(1, true));
 
 		// label for the title
-		this.label = new Label(grp , SWT.NONE);
+		this.label = new Label(this.currentShell, SWT.NONE);
 		this.label.setText(this.title);
 
-		GridData gridData = new GridData();
-		gridData.verticalAlignment = SWT.CENTER;
-		gridData.horizontalAlignment = SWT.FILL;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		this.label.setLayoutData(gridData);
-		this.label=new Label(grp , SWT.NONE);
-
 		// progress bar
-		this.progressBar = new CustomProgressBar(grp , SWT.SMOOTH);
-
+		this.progressBar = new CustomProgressBar(this.currentShell, SWT.SMOOTH);
+		
 		Monitor primary = parentShell.getMonitor();
 		Rectangle bounds = primary.getBounds();
 		Rectangle pict = this.currentShell.getBounds();
@@ -230,7 +215,7 @@ public class FormProgressBar implements IProgressBar {
 	 * @param text
 	 */
 	@Override
-	public void setLabel (final String text) {
+	public void setLabel (String text) {
 
 		if (this.progressBar.isDisposed())
 			return;
@@ -251,8 +236,10 @@ public class FormProgressBar implements IProgressBar {
 				if (FormProgressBar.this.progressBar.isDisposed())
 					return;
 
-				if (FormProgressBar.this.label != null)
+				if (FormProgressBar.this.label != null) {
 					FormProgressBar.this.label.setText(text);
+					FormProgressBar.this.progressBar.getProgressBar().getParent().layout();
+				}
 			}
 		});
 	}

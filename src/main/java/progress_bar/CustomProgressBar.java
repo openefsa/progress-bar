@@ -24,14 +24,14 @@ public class CustomProgressBar implements IProgressBar {
 	public CustomProgressBar( Composite parent, int style ) {
 		this.parent = parent;
 		this.listeners = new ArrayList<>();
-		initializeGraphics( style );
+		InitialiseGraphics( style );
 	}
 	
 	/**
 	 * Creates all the graphics for the progress bar
 	 * @param parentShell
 	 */
-	public void initializeGraphics ( int style ) {
+	public void InitialiseGraphics ( int style ) {
 
 		// progress bar
 		this.progressBar = new ProgressBar( this.parent, style );

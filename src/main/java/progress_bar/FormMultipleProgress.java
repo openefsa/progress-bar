@@ -21,7 +21,9 @@ import progress_bar.TableMultipleProgress.TableRow;
  * possible to access the progress bar using {@link TableRow#getBar()}.
  * This progress bar can be shared in threads and updated
  * directly by them using {@link IProgressBar#addProgress(double)}.
+ * 
  * @author avonva
+ * @author shahaal
  *
  */
 public class FormMultipleProgress {
@@ -38,11 +40,11 @@ public class FormMultipleProgress {
 	}
 
 	/**
-	 * Initialize graphics
+	 * Initialise graphics
 	 */
 	public void init() {
 		
-		this.dialog = new Shell( this.shell, SWT.SHELL_TRIM | SWT.APPLICATION_MODAL );
+		this.dialog = new Shell( this.shell, SWT.TITLE | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL );
 
 		this.dialog.setLayout( new GridLayout( 1, false ) );
 
