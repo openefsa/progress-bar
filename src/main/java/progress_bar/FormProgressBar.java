@@ -1,4 +1,5 @@
 package progress_bar;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -9,7 +10,6 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
-
 public class FormProgressBar implements IProgressBar {
 
 	private Shell shell;
@@ -19,14 +19,16 @@ public class FormProgressBar implements IProgressBar {
 	private Label label;
 	private String title;
 
-	private boolean opened;        // if the bar is opened or not
+	private boolean opened; // if the bar is opened or not
+
 	/**
-	 * Constructor, Initialise the progress bar
-	 * @param shell the shell where to create the progress bar
-	 * @param title the title of the progress bar
+	 * Constructor, Initialize the progress bar
+	 * 
+	 * @param shell         the shell where to create the progress bar
+	 * @param title         the title of the progress bar
 	 * @param cancelEnabled if the cancel button should be inserted or not
 	 */
-	public FormProgressBar(Shell shell , String title, boolean cancelEnabled, int style) {
+	public FormProgressBar(Shell shell, String title, boolean cancelEnabled, int style) {
 
 		this.opened = false;
 
@@ -43,6 +45,7 @@ public class FormProgressBar implements IProgressBar {
 
 	/**
 	 * Initialise the progress bar without cancel button
+	 * 
 	 * @param shell the shell where to create the progress bar
 	 * @param title the title of the progress bar
 	 */
@@ -59,7 +62,7 @@ public class FormProgressBar implements IProgressBar {
 
 			@Override
 			public void run() {
-				InitialiseGraphics (FormProgressBar.this.shell, FormProgressBar.this.style);
+				InitialiseGraphics(FormProgressBar.this.shell, FormProgressBar.this.style);
 			}
 		});
 
@@ -67,51 +70,53 @@ public class FormProgressBar implements IProgressBar {
 
 	/**
 	 * Creates all the graphics for the progress bar
+	 * 
 	 * @param parentShell
 	 */
-	public void InitialiseGraphics (Shell parentShell, int style) {
+	public void InitialiseGraphics(Shell parentShell, int style) {
 
-		this.currentShell = new Shell(parentShell, style);
-		this.currentShell.setText(this.title);
-		this.currentShell.setSize(350, 100);
-		this.currentShell.setLayout(new GridLayout(1, true));
+		currentShell = new Shell(parentShell, style);
+		currentShell.setText(this.title);
+		currentShell.setSize(350, 100);
+		currentShell.setLayout(new GridLayout(1, true));
 
 		// label for the title
-		this.label = new Label(this.currentShell, SWT.NONE);
+		this.label = new Label(currentShell, SWT.NONE);
 		this.label.setText(this.title);
 
 		// progress bar
-		this.progressBar = new CustomProgressBar(this.currentShell, SWT.SMOOTH);
-		
+		this.progressBar = new CustomProgressBar(currentShell, SWT.SMOOTH);
+
 		Monitor primary = parentShell.getMonitor();
 		Rectangle bounds = primary.getBounds();
-		Rectangle pict = this.currentShell.getBounds();
+		Rectangle pict = currentShell.getBounds();
 		int x = bounds.x + (bounds.width - pict.width) / 2;
 		int y = bounds.y + (bounds.height - pict.height) / 2;
-		this.currentShell.setLocation(x, y);
+		currentShell.setLocation(x, y);
 	}
 
 	/**
 	 * Set the location of the progress bar
+	 * 
 	 * @param x
 	 * @param y
 	 */
-	public void setLocation (int x, int y) {
-		this.currentShell.setLocation(x, y);
+	public void setLocation(int x, int y) {
+		currentShell.setLocation(x, y);
 	}
 
 	/**
 	 * Get the location of the progress bar
 	 */
-	public Point getLocation () {
-		return this.currentShell.getLocation();
+	public Point getLocation() {
+		return currentShell.getLocation();
 	}
 
 	/**
 	 * Show the progress bar
 	 */
 	@Override
-	public void open () {
+	public void open() {
 		this.opened = true;
 
 		if (!this.shell.isDisposed()) {
@@ -119,18 +124,17 @@ public class FormProgressBar implements IProgressBar {
 
 				@Override
 				public void run() {
-					FormProgressBar.this.currentShell.open();
+					currentShell.open();
 				}
 			});
 		}
 	}
 
-
 	/**
 	 * Close the progress bar
 	 */
 	@Override
-	public void close () {
+	public void close() {
 
 		// set the opened state accordingly
 		this.opened = false;
@@ -143,16 +147,17 @@ public class FormProgressBar implements IProgressBar {
 			return;
 		disp.asyncExec(new Runnable() {
 			@Override
-			public void run () {
-				if (FormProgressBar.this.currentShell.isDisposed())
+			public void run() {
+				if (currentShell.isDisposed())
 					return;
-				FormProgressBar.this.currentShell.close();
+				currentShell.close();
 			}
 		});
 	}
 
 	/**
 	 * Set a maximum limit for the progress
+	 * 
 	 * @param progressLimit
 	 */
 	public void setProgressLimit(int progressLimit) {
@@ -164,10 +169,10 @@ public class FormProgressBar implements IProgressBar {
 	}
 
 	/**
-	 * Set how much should the progress bar increase its
-	 * value each operation step. Used with operations that
-	 * have several steps to automatize the progress increase
-	 * for each step by calling {@link #nextStep()}
+	 * Set how much should the progress bar increase its value each operation step.
+	 * Used with operations that have several steps to automatize the progress
+	 * increase for each step by calling {@link #nextStep()}
+	 * 
 	 * @param progressStep
 	 */
 	public void setProgressStep(double progressStep) {
@@ -175,30 +180,30 @@ public class FormProgressBar implements IProgressBar {
 	}
 
 	/**
-	 * Increase the progress bar according to the
-	 * {@link #progressStep} variable
+	 * Increase the progress bar according to the {@link #progressStep} variable
 	 */
 	public void nextStep() {
 		this.progressBar.nextStep();
 	}
 
 	/**
-	 * Add a progress to the progress bar. The current progress
-	 * is added to the last progress. If a double < 1 is passed
-	 * we accumulate the progresses until we reach an integer, in order
-	 * to set the progress bar progresses
+	 * Add a progress to the progress bar. The current progress is added to the last
+	 * progress. If a double < 1 is passed we accumulate the progresses until we
+	 * reach an integer, in order to set the progress bar progresses
+	 * 
 	 * @param progress
 	 */
 	@Override
-	public void addProgress (double progress) {
+	public void addProgress(double progress) {
 		this.progressBar.addProgress(progress);
 	}
 
 	/**
 	 * Set the progress of the progress bar
+	 * 
 	 * @param percent
 	 */
-	public void setProgress (double percent) {
+	public void setProgress(double percent) {
 		this.progressBar.setProgress(percent);
 	}
 
@@ -212,10 +217,11 @@ public class FormProgressBar implements IProgressBar {
 
 	/**
 	 * Set the label of the progress bar
+	 * 
 	 * @param text
 	 */
 	@Override
-	public void setLabel (String text) {
+	public void setLabel(String text) {
 
 		if (this.progressBar.isDisposed())
 			return;
@@ -231,7 +237,7 @@ public class FormProgressBar implements IProgressBar {
 
 		disp.asyncExec(new Runnable() {
 			@Override
-			public void run () {
+			public void run() {
 
 				if (FormProgressBar.this.progressBar.isDisposed())
 					return;
@@ -246,6 +252,7 @@ public class FormProgressBar implements IProgressBar {
 
 	/**
 	 * Get if the progress bar is open or not
+	 * 
 	 * @return
 	 */
 	public boolean isOpened() {
@@ -254,6 +261,7 @@ public class FormProgressBar implements IProgressBar {
 
 	/**
 	 * Check if the progress bar is filled at 100%
+	 * 
 	 * @return
 	 */
 	public boolean isCompleted() {

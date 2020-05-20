@@ -2,11 +2,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>openefsa</groupId>
-		<artifactId>all-projects</artifactId>
-		<version>${global.version}</version>
-	</parent>
+	<groupId>openefsa</groupId>
+	<version>1.1.0</version>
 	<artifactId>progress-bar</artifactId>
 
 	<properties>
@@ -14,13 +11,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
 	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>swt</groupId>
-			<artifactId>swt</artifactId>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
