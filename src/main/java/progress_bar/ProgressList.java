@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ListIterator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * List which plans the execution of several pieces of codes. Each
  * piece of code is contained in a {@link ProgressStep} object in the
@@ -20,6 +23,9 @@ import java.util.ListIterator;
  *
  */
 public class ProgressList extends ArrayList<ProgressStep> {
+	
+	private static final Logger LOGGER = LogManager.getLogger(ProgressList.class);
+	
 	private static final long serialVersionUID = 1074566667820675565L;
 
 	private int maxProgress;
@@ -66,6 +72,7 @@ public class ProgressList extends ArrayList<ProgressStep> {
 				
 				step.start();
 			} catch (Exception e) {
+				LOGGER.error("There was a problem going through the listener list", e);
 				e.printStackTrace();
 				
 				for ( ProgressStepListener listener : this.listeners )
