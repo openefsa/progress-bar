@@ -1,5 +1,7 @@
 package progress_bar;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.layout.GridData;
@@ -19,6 +21,8 @@ import messages.Messages;
  *
  */
 public class TableMultipleProgress {
+	
+	private static final Logger LOGGER = LogManager.getLogger(TableMultipleProgress.class);
 
 	private Composite parent;
 	private Table table;
@@ -69,6 +73,7 @@ public class TableMultipleProgress {
 		this.table.getColumn(1).setWidth(128);
 		this.table.getColumn(2).setWidth(256);
 
+		LOGGER.debug("Table row ", row);
 		return row;
 	}
 
